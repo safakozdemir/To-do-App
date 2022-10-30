@@ -50,6 +50,9 @@ class ToDoTile extends StatelessWidget {
                           : TextDecoration.none),
                 ),
               ),
+              const Icon(
+                Icons.chevron_left,
+              )
             ],
           ),
         ),
