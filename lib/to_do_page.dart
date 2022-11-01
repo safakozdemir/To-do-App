@@ -70,12 +70,6 @@ class _TodoPageState extends State<TodoPage> {
     return Scaffold(
         extendBodyBehindAppBar: true,
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: const Text('MY TO DO!',
-              style: TextStyle(color: Colors.black, fontSize: 25)),
-          elevation: 0,
-        ),
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(colors: [
@@ -86,16 +80,36 @@ class _TodoPageState extends State<TodoPage> {
               Color(0xFF68998c),
             ], begin: Alignment.topRight, end: Alignment.bottomLeft),
           ),
-          child: ListView.builder(
-            itemCount: tdDb.todoList.length,
-            itemBuilder: (context, index) {
-              return ToDoTile(
-                taskName: tdDb.todoList[index][0],
-                checked: tdDb.todoList[index][1],
-                onChanged: (value) => checkBoxStateChanged(value, index),
-                deleteFunction: (context) => deleteTask(index),
-              );
-            },
+          child: CustomScrollView(
+            slivers: <Widget>[
+              const SliverAppBar(
+                title: Text('MY TO DO!',
+                    style: TextStyle(color: Colors.black, fontSize: 25)),
+                backgroundColor: Colors.transparent,
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                    height: 20,
+                    child: Center(
+                        child: Text(
+                      'You have ${tdDb.todoList.length} tasks',
+                      style: const TextStyle(fontSize: 22),
+                    ))),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return ToDoTile(
+                        taskName: tdDb.todoList[index][0],
+                        checked: tdDb.todoList[index][1],
+                        onChanged: (value) =>
+                            checkBoxStateChanged(value, index),
+                        deleteFunction: (context) => deleteTask(index));
+                  },
+                  childCount: tdDb.todoList.length,
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
